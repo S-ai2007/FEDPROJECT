@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Secure-looking client-side Online Voting System demo for SDC review.">
+  <title>VoteSphere | Online Voting System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- LOGIN / SIGNUP -->
+  <div id="authPage">
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="VoteSphere home">
+        <span class="brand-mark">✓</span>
+        <span><strong>VoteSphere</strong><small>Online Voting System</small></span>
+      </a>
+      <div class="top-actions">
+        <span id="sessionLabel" class="session-label">Guest</span>
+        <button id="authLogoutBtn" class="btn btn-outline hidden">Logout</button>
+      </div>
+    </header>
+
+    <main id="app">
+      <section class="page-shell auth-layout">
+        <div class="hero-panel">
+          <div class="eyebrow">SDC PROJECT • CLIENT-SIDE DEMO</div>
+          <h1>Simple. Clear.<br><span>Vote with confidence.</span></h1>
+          <p>A polished Online Voting System built only with HTML, CSS and JavaScript, with Local Storage authentication, role-based modules and live vote dashboards.</p>
+          <div class="feature-grid">
+            <div class="feature-card"><span>01</span><div><b>Role based</b><small>Separate Admin and User modules</small></div></div>
+            <div class="feature-card"><span>02</span><div><b>Local Storage</b><small>Signup, login and voting state</small></div></div>
+            <div class="feature-card"><span>03</span><div><b>Responsive UI</b><small>CSS Grid + Flexbox layout</small></div></div>
+            <div class="feature-card"><span>04</span><div><b>Review ready</b><small>Dashboard, results and controls</small></div></div>
+          </div>
+          <div class="demo-note"><b>Demo Admin</b><br>Username: <code>admin</code> · Password: <code>admin123</code></div>
+        </div>
+
+        <div class="auth-card card">
+          <div class="tabs" role="tablist">
+            <button class="tab active" data-auth-tab="login">Login</button>
+            <button class="tab" data-auth-tab="signup">Create account</button>
+          </div>
+
+          <form id="loginForm" class="auth-form">
+            <div class="form-heading"><h2>Welcome back</h2><p>Sign in to access your voting dashboard.</p></div>
+            <label>Username<input id="loginUsername" type="text" autocomplete="username" placeholder="Enter username" required></label>
+            <label>Password<div class="password-wrap"><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Enter password" required><button type="button" class="password-toggle" data-target="loginPassword">Show</button></div></label>
+            <button class="btn btn-primary btn-full" type="submit">Login <span>→</span></button>
+            <p class="form-foot">New voter? <button type="button" class="text-btn" data-auth-tab="signup">Create an account</button></p>
+          </form>
+
+          <form id="signupForm" class="auth-form hidden">
+            <div class="form-heading"><h2>Create voter account</h2><p>Register locally for this project demonstration.</p></div>
+            <label>Full name<input id="signupName" type="text" autocomplete="name" placeholder="Your full name" minlength="3" required></label>
+            <label>Username<input id="signupUsername" type="text" autocomplete="username" placeholder="Choose a username" pattern="[A-Za-z0-9_]{3,20}" required></label>
+            <label>Password<div class="password-wrap"><input id="signupPassword" type="password" autocomplete="new-password" placeholder="At least 6 characters" minlength="6" required><button type="button" class="password-toggle" data-target="signupPassword">Show</button></div></label>
+            <label>Confirm password<input id="signupConfirm" type="password" autocomplete="new-password" placeholder="Repeat password" minlength="6" required></label>
+            <button class="btn btn-primary btn-full" type="submit">Create account <span>→</span></button>
+            <p class="form-foot">Already registered? <button type="button" class="text-btn" data-auth-tab="login">Login</button></p>
+          </form>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer">VoteSphere • SDC Academic Project • HTML + CSS + JavaScript + Local Storage</footer>
+  </div>
+
+  <!-- ADMIN -->
+  <div id="adminPage" class="hidden">
+    <header class="topbar">
+      <a class="brand" href="index.html"><span class="brand-mark">✓</span><span><strong>VoteSphere</strong><small>Admin Console</small></span></a>
+      <div class="top-actions"><span id="adminName" class="session-label"></span><button id="adminLogoutBtn" class="btn btn-outline">Logout</button></div>
+    </header>
+    <div class="dashboard">
+      <aside class="sidebar">
+        <div class="side-title">ADMIN MODULE</div>
+        <button class="side-link active" data-section="overview">◈ <span>Overview</span></button>
+        <button class="side-link" data-section="elections">▣ <span>Elections</span></button>
+        <button class="side-link" data-section="candidates">♙ <span>Candidates</span></button>
+        <button class="side-link" data-section="voters">◎ <span>Voters</span></button>
+        <button class="side-link" data-section="results">▤ <span>Results</span></button>
+        <div class="sidebar-bottom"><div class="security-dot"></div><small>Local demo storage<br>Data persists in this browser</small></div>
+      </aside>
+      <main class="content">
+        <section class="dash-section active" id="overview">
+          <div class="page-heading"><div><span class="eyebrow">CONTROL CENTER</span><h1>Good day, Admin.</h1><p>Monitor elections, voters and participation from one place.</p></div><button class="btn btn-primary" data-jump="elections">+ New election</button></div>
+          <div id="adminStats" class="stats-grid"></div>
+          <div class="two-col">
+            <div class="card panel"><div class="panel-head"><div><h3>Current election</h3><p>Live participation snapshot</p></div><span class="status-badge live">● LIVE</span></div><div id="adminLive"></div></div>
+            <div class="card panel"><div class="panel-head"><div><h3>Quick actions</h3><p>Common administration tasks</p></div></div><div class="quick-actions"><button data-jump="candidates">Manage candidates <span>→</span></button><button data-jump="voters">View registered voters <span>→</span></button><button data-jump="results">View live results <span>→</span></button></div></div>
+          </div>
+        </section>
+        <section class="dash-section" id="elections">
+          <div class="page-heading"><div><span class="eyebrow">ELECTION MANAGEMENT</span><h1>Elections</h1><p>Create, activate or close an election.</p></div></div>
+          <div class="card panel"><form id="electionForm" class="inline-form"><label>Election title<input id="electionTitle" placeholder="e.g. Student Council Election 2026" required></label><label>Date<input id="electionDate" type="date" required></label><button class="btn btn-primary" type="submit">Create election</button></form></div>
+          <div id="electionList" class="election-list"></div>
+        </section>
+        <section class="dash-section" id="candidates">
+          <div class="page-heading"><div><span class="eyebrow">CANDIDATE MANAGEMENT</span><h1>Candidates</h1><p>Add candidates to the active election.</p></div></div>
+          <div class="card panel"><form id="candidateForm" class="inline-form"><label>Candidate name<input id="candidateName" placeholder="Full name" required></label><label>Position<input id="candidatePosition" placeholder="e.g. President" required></label><label>Symbol<input id="candidateSymbol" maxlength="2" placeholder="★"></label><button class="btn btn-primary" type="submit">Add candidate</button></form></div>
+          <div id="candidateList" class="candidate-grid"></div>
+        </section>
+        <section class="dash-section" id="voters">
+          <div class="page-heading"><div><span class="eyebrow">VOTER MANAGEMENT</span><h1>Registered voters</h1><p>Review users registered through Local Storage.</p></div></div>
+          <div class="card panel"><div id="voterTable"></div></div>
+        </section>
+        <section class="dash-section" id="results">
+          <div class="page-heading"><div><span class="eyebrow">RESULTS CENTER</span><h1>Election results</h1><p>Live vote count calculated from stored ballots.</p></div><button id="resetVotesBtn" class="btn btn-danger-outline">Reset demo votes</button></div>
+          <div class="card panel"><div id="resultBoard"></div></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- USER / VOTER -->
+  <div id="userPage" class="hidden">
+    <header class="topbar">
+      <a class="brand" href="index.html"><span class="brand-mark">✓</span><span><strong>VoteSphere</strong><small>Voter Portal</small></span></a>
+      <div class="top-actions"><span id="userName" class="session-label"></span><button id="userLogoutBtn" class="btn btn-outline">Logout</button></div>
+    </header>
+    <div class="dashboard user-dashboard">
+      <aside class="sidebar">
+        <div class="side-title">USER MODULE</div>
+        <button class="side-link active" data-user-section="vote">◉ <span>Cast Vote</span></button>
+        <button class="side-link" data-user-section="status">✓ <span>My Status</span></button>
+        <button class="side-link" data-user-section="results">▤ <span>Results</span></button>
+        <div class="sidebar-bottom"><div class="security-dot"></div><small>One person, one vote<br>Your demo ballot is stored locally</small></div>
+      </aside>
+      <main class="content">
+        <section class="dash-section active" id="vote">
+          <div class="page-heading"><div><span class="eyebrow">VOTER MODULE</span><h1>Cast your vote</h1><p>Select one candidate and confirm your ballot.</p></div></div>
+          <div id="electionHero" class="election-hero"></div>
+          <div id="votingArea"></div>
+        </section>
+        <section class="dash-section" id="status">
+          <div class="page-heading"><div><span class="eyebrow">BALLOT STATUS</span><h1>My voting status</h1><p>Review your participation in the current election.</p></div></div>
+          <div id="statusCard"></div>
+        </section>
+        <section class="dash-section" id="results">
+          <div class="page-heading"><div><span class="eyebrow">TRANSPARENCY</span><h1>Live results</h1><p>Vote totals shown after you submit your ballot.</p></div></div>
+          <div id="userResults" class="card panel"></div>
+        </section>
+      </main>
+    </div>
+    <div id="confirmModal" class="modal hidden">
+      <div class="modal-card"><button class="modal-close" id="modalClose">×</button><div class="modal-icon">✓</div><h2>Confirm your vote</h2><p id="confirmText">You are about to submit your ballot.</p><div class="modal-actions"><button class="btn btn-outline" id="cancelVote">Cancel</button><button class="btn btn-primary" id="confirmVote">Confirm vote</button></div></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
